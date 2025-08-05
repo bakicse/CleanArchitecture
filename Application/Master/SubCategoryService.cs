@@ -74,16 +74,19 @@ internal class SubCategoryService : ISubCategoryService
         var subCategory = mapper.Map<SubCategory>(subCategoryDto);
         try
         {
+            _unitOfWork.BeginTransaction();
             if (subCategory.Id > 0)
                 _unitOfWork.Repository<SubCategory>().Update(subCategory);
             else
                 await _unitOfWork.Repository<SubCategory>().AddAsync(subCategory);
 
             await _unitOfWork.SaveAsync();
+            _unitOfWork.CommitTransaction();
             return ResponseModel.SuccessResponse(GlobalDeclaration._successResponse, mapper.Map<SubCategoryVm>(subCategory));
         }
         catch (Exception ex)
         {
+            _unitOfWork.RollbackTransaction();
             Log(nameof(UpsertAsync), ex.Message);
             logger?.LogError(ex.ToString());
             return ResponseModel.FailureResponse(GlobalDeclaration._internalServerError);
