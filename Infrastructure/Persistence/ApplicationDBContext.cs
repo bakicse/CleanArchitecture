@@ -23,6 +23,8 @@ namespace Infrastructure.Persistence
         #region Master
         public DbSet<AppSetting> AppSettings { get; set; }
         public DbSet<ReferenceField> ReferenceFields { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
         #endregion
 
         public async Task<int> SaveChangesAsync()
@@ -30,7 +32,7 @@ namespace Infrastructure.Persistence
 
             foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
             {
-                var currentUserEmail = "Initiator"; //(await _currentUserService.GetCurrentUserAsync()).UserEmail;
+                var currentUserEmail = "jannatul14.baki@gmail.com"; //(await _currentUserService.GetCurrentUserAsync()).UserEmail;
                 switch (entry.State)
                 {
                     case EntityState.Added:
@@ -61,6 +63,28 @@ namespace Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDBContext).Assembly);
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes()
+                         .Where(e => typeof(IAuditableEntity).IsAssignableFrom(e.ClrType)))
+            {
+                var builder = modelBuilder.Entity(entityType.ClrType);
+
+                builder.Property(nameof(IAuditableEntity.Created))
+                    .HasColumnType("datetime")
+                    .IsRequired();
+
+                builder.Property(nameof(IAuditableEntity.Author))
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                builder.Property(nameof(IAuditableEntity.Modified))
+                    .HasColumnType("datetime")
+                    .IsRequired();
+
+                builder.Property(nameof(IAuditableEntity.Editor))
+                    .HasMaxLength(100)
+                    .IsRequired();
+            }
         }
     }
 }

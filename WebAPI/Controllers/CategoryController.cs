@@ -4,18 +4,18 @@ using Application.Master.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
-[Route("api/AppSetting")]
+[Route("api/Category")]
 [ApiController]
-public class AppSettingController(IAppSettingService appSettingService) : ControllerBase
+public class CategoryController (ICategoryService categoryService) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<ResponseModel>> Upsert([FromBody] AppSettingVm appSettingVm)
+    public async Task<ActionResult<ResponseModel>> Upsert([FromBody] CategoryVm categoryVm)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ResponseModel.FailureResponse("Invalid data provided."));
         }
-        var response = await appSettingService.UpsertAsync(appSettingVm);
+        var response = await categoryService.UpsertAsync(categoryVm);
         if (response.Success)
         {
             return Ok(response);
@@ -26,7 +26,7 @@ public class AppSettingController(IAppSettingService appSettingService) : Contro
     [HttpDelete("{id}")]
     public async Task<ActionResult<ResponseModel>> Delete(int id)
     {
-        var response = await appSettingService.DeleteAsync(id);
+        var response = await categoryService.DeleteAsync(id);
         if (response.Success)
         {
             return Ok(response);
@@ -41,7 +41,7 @@ public class AppSettingController(IAppSettingService appSettingService) : Contro
     [HttpGet]
     public async Task<ActionResult<ResponseModel>> GetAll()
     {
-        var response = await appSettingService.GetAsync();
+        var response = await categoryService.GetAsync();
         if (response.Success)
         {
             return Ok(response);
@@ -52,7 +52,7 @@ public class AppSettingController(IAppSettingService appSettingService) : Contro
     [HttpGet("{id}")]
     public async Task<ActionResult<ResponseModel>> GetById(int id)
     {
-        var response = await appSettingService.GetByIdAsync(id);
+        var response = await categoryService.GetByIdAsync(id);
         if (response.Success)
         {
             return Ok(response);

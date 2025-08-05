@@ -1,5 +1,4 @@
 ﻿using Application.Common.Interface;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Collections;
 

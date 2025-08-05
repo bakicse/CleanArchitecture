@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Common.Model;
+﻿using Application.Common.Model;
 
 namespace Application.Common.Interface;
 public interface IRepositoryService<T> where T : class
