@@ -11,6 +11,7 @@ public interface IRepository<T> where T : class
     Task<bool> Delete(T entity);
     Task<bool> Delete(Expression<Func<T, bool>> where);
     Task<T> Get(object id);
+    Task<T> GetWithInclude<TProperty>(object id, Expression<Func<T, TProperty?>> navigationPropertyPath) where TProperty : class;
     Task<T> Get(Expression<Func<T, bool>> where);
     IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
     IEnumerable<T> GetAll();

@@ -1,6 +1,7 @@
 ﻿using Application.Common.Model;
 using Application.Master;
 using Application.Master.Dto;
+using Application.Master.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -9,13 +10,13 @@ namespace WebAPI.Controllers;
 public class SubCategoryController (ISubCategoryService subCategoryService) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<ResponseModel>> Upsert([FromBody] SubCategoryVm subCategoryVm)
+    public async Task<ActionResult<ResponseModel>> Upsert([FromBody] SubCategoryDto subCategoryDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ResponseModel.FailureResponse("Invalid data provided."));
         }
-        var response = await subCategoryService.UpsertAsync(subCategoryVm);
+        var response = await subCategoryService.UpsertAsync(subCategoryDto);
         if (response.Success)
         {
             return Ok(response);

@@ -1,7 +1,7 @@
 ﻿using Application.Common.Error;
 using Application.Common.Interface;
 using Application.Common.Model;
-using Application.Master.Dto;
+using Application.Master.ViewModel;
 using AutoMapper;
 using Domain.Master;
 using Microsoft.EntityFrameworkCore;

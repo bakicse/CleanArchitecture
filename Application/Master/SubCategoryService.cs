@@ -2,6 +2,7 @@
 using Application.Common.Interface;
 using Application.Common.Model;
 using Application.Master.Dto;
+using Application.Master.ViewModel;
 using AutoMapper;
 using Domain.Master;
 using Microsoft.Extensions.Logging;
@@ -50,10 +51,11 @@ internal class SubCategoryService : ISubCategoryService
     {
         try
         {
-            var subCategories = await _unitOfWork.Repository<SubCategory>().Get(Id);
-            if (subCategories != null)
+            //var subCategory = await _unitOfWork.Repository<SubCategory>().Get(Id);
+            var subCategory = await _unitOfWork.Repository<SubCategory>().GetWithInclude(Id, s => s.Category);
+            if (subCategory != null)
             {
-                var categoryVms = mapper.Map<SubCategoryVm>(subCategories);
+                var categoryVms = mapper.Map<SubCategoryVm>(subCategory);
                 return ResponseModel.SuccessResponse(GlobalDeclaration._successResponse, categoryVms);
             }
             else
@@ -67,9 +69,9 @@ internal class SubCategoryService : ISubCategoryService
         }
     }
 
-    public async Task<ResponseModel> UpsertAsync(SubCategoryVm subCategoryVm)
+    public async Task<ResponseModel> UpsertAsync(SubCategoryDto subCategoryDto)
     {
-        var subCategory = mapper.Map<SubCategory>(subCategoryVm);
+        var subCategory = mapper.Map<SubCategory>(subCategoryDto);
         try
         {
             if (subCategory.Id > 0)

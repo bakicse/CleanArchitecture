@@ -1,6 +1,6 @@
 ﻿using Application.Common.Model;
 using Application.Master;
-using Application.Master.Dto;
+using Application.Master.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;

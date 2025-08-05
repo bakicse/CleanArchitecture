@@ -1,4 +1,4 @@
-﻿namespace Application.Master.Dto
+﻿namespace Application.Master.ViewModel
 {
     public class AppSettingVm
     {

@@ -1,10 +1,11 @@
 ﻿using Application.Common.Error;
 using Application.Common.Interface;
 using Application.Common.Model;
+using Application.Master.Dto;
+using Application.Master.ViewModel;
 using AutoMapper;
 using Domain.Master;
 using Microsoft.Extensions.Logging;
-using Application.Master.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Master;
@@ -67,9 +68,9 @@ internal class CategoryService : ICategoryService
         }
     }
 
-    public async Task<ResponseModel> UpsertAsync(CategoryVm categoryVm)
+    public async Task<ResponseModel> UpsertAsync(CategoryDto categoryDto)
     {
-        var category = mapper.Map<Category>(categoryVm);
+        var category = mapper.Map<Category>(categoryDto);
         try
         {
             if (category.Id > 0)

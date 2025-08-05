@@ -108,6 +108,19 @@ namespace Infrastructure.Persistence
         {
             return await Entities.FindAsync(id);
         }
+        public async Task<T> GetWithInclude<TProperty>(object id, Expression<Func<T, TProperty?>> navigationPropertyPath) where TProperty : class
+        {
+            var entity = await Entities.FindAsync(id);
+
+            if (entity != null)
+            {
+                // The 'Reference' method is used for single-entity relationships.
+                // It's not for collections. The 'TProperty' must be a reference type.
+                await _context.Entry(entity).Reference(navigationPropertyPath).LoadAsync();
+            }
+
+            return entity;
+        }
         public async Task<T> Get(Expression<Func<T, bool>> where)
         {
             return await Entities.FirstOrDefaultAsync(where);
