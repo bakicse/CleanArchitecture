@@ -41,7 +41,7 @@ internal class SubCategoryService : ISubCategoryService
         }
         catch (Exception ex)
         {
-            Log(nameof(GetAsync), ex.Message);
+            Log(nameof(GetAsync), ex);
             logger?.LogError(ex.ToString());
             return ResponseModel.FailureResponse(GlobalDeclaration._internalServerError);
         }
@@ -63,7 +63,7 @@ internal class SubCategoryService : ISubCategoryService
         }
         catch (Exception ex)
         {
-            Log(nameof(GetByIdAsync), ex.Message);
+            Log(nameof(GetByIdAsync), ex);
             logger?.LogError(ex.ToString());
             return ResponseModel.FailureResponse(GlobalDeclaration._internalServerError);
         }
@@ -87,7 +87,7 @@ internal class SubCategoryService : ISubCategoryService
         catch (Exception ex)
         {
             _unitOfWork.RollbackTransaction();
-            Log(nameof(UpsertAsync), ex.Message);
+            Log(nameof(UpsertAsync), ex);
             logger?.LogError(ex.ToString());
             return ResponseModel.FailureResponse(GlobalDeclaration._internalServerError);
         }
@@ -109,16 +109,16 @@ internal class SubCategoryService : ISubCategoryService
         }
         catch (Exception ex)
         {
-            Log(nameof(DeleteAsync), ex.Message);
+            Log(nameof(DeleteAsync), ex);
             logger?.LogError(ex.ToString());
             return ResponseModel.FailureResponse(GlobalDeclaration._internalServerError);
         }
     }
     #endregion
     #region Error
-    private void Log(string method, string msg)
+    private void Log(string method, Exception ex)
     {
-        errorMessageLog.LogError("Application", "AppSettingService", method, msg);
+        errorMessageLog.LogError("Application", "AppSettingService", method, ex);
     }
 
     #endregion

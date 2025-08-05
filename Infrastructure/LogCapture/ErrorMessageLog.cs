@@ -12,7 +12,7 @@ namespace Infrastructure.LogCapture
             _logsPath = Path.Combine(rootPath, "Logs");
         }
 
-        public bool LogError(string layerName, string className, string methodName, string msg)
+        public bool LogError(string layerName, string className, string methodName, Exception ex)
         {
             try
             {
@@ -20,10 +20,25 @@ namespace Infrastructure.LogCapture
                     Directory.CreateDirectory(_logsPath);
 
                 var dtNow = DateTime.Now.ToString("yyyy-MM-dd");
-
                 string errLogs = Path.Combine(_logsPath, dtNow + "_ErrorLogs.txt");
 
-                lock(this)
+                #region ErrorMessageWithInnerException
+                var lineNo = string.Empty;
+                if (!string.IsNullOrEmpty(ex.StackTrace))
+                {
+                    string[] lines = ex.StackTrace.Split(':');
+                    lineNo = lines[^1].Trim();
+                }
+
+                Exception lastInnerException = ex;
+                while (lastInnerException.InnerException != null)
+                    lastInnerException = lastInnerException.InnerException;
+
+                var innerExceptionMessage = lastInnerException.Message ?? "No inner exception";
+                var msg = $"Catch Exception: {ex.Message} InnerExp: {innerExceptionMessage},  {lineNo}.";
+                #endregion
+
+                lock (this)
                 {
                     using var sw = File.AppendText(errLogs);
 
